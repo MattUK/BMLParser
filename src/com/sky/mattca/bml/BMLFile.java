@@ -27,14 +27,14 @@ package com.sky.mattca.bml;
 
 public class BMLFile {
 
-    public String fileLocation;
-    public boolean modified;
+    private String fileLocation;
 
     public BMLFile(String fileLocation) {
         this.fileLocation = fileLocation;
-        modified = false;
     }
 
-    
+    public String getFileLocation() {
+        return fileLocation;
+    }
 
 }
