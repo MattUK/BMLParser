@@ -54,7 +54,8 @@ public class Handler {
             "Unexpected '.'",
             "Unexpected character '%s'",
             "Expected digit to follow decimal point",
-            "Incorrect usage of '=', use ':' for assignment"
+            "Incorrect usage of '=', use ':' for assignment",
+            "Expected identifier"
     };
 
     private static List<BuildError> errors = new ArrayList<>();

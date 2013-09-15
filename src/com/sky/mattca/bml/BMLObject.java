@@ -25,6 +25,7 @@
 
 package com.sky.mattca.bml;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -35,10 +36,20 @@ public class BMLObject {
     private List<BMLProperty> properties;
     private List<BMLObject> subObjects;
 
-    public BMLObject(String objectName, List<BMLProperty> properties, List<BMLObject> subObjects) {
+    private int layer;
+
+    public BMLObject(String objectName, int layer) {
+        this.objectName = objectName;
+        this.layer = layer;
+        this.properties = new ArrayList<>();
+        this.subObjects = new ArrayList<>();
+    }
+
+    public BMLObject(String objectName, List<BMLProperty> properties, List<BMLObject> subObjects, int layer) {
         this.objectName = objectName;
         this.properties = properties;
         this.subObjects = subObjects;
+        this.layer = layer;
     }
 
     public String getObjectName() {

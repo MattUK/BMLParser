@@ -35,6 +35,7 @@ public enum TokenType {
     STRUCTURE_DECLARATION(":"),
     FILE_REFERENCE("@:"),
     VALUE_SEPARATOR(","),
+    TAB("\t"),
     NONE;
 
     public String tokenValue;

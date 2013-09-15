@@ -25,16 +25,108 @@
 
 package com.sky.mattca.bml;
 
+import com.sky.mattca.bml.Lexer.Lexer;
+import com.sky.mattca.bml.Lexer.TokenString;
+import com.sky.mattca.bml.Lexer.TokenType;
+
+import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.List;
+
 public class BMLFile {
 
     private String fileLocation;
+    private BMLObject rootObject;
+
+    private Lexer lexer;
 
     public BMLFile(String fileLocation) {
         this.fileLocation = fileLocation;
+        lexer = new Lexer();
     }
 
     public String getFileLocation() {
         return fileLocation;
+    }
+
+    private void loadFromFileLocation() {
+        try (InputStreamReader reader = new InputStreamReader(new FileInputStream(fileLocation))) {
+            BufferedReader input = new BufferedReader(reader);
+            String line = "";
+            while (input.ready()) {
+                line = input.readLine();
+                lexer.addSourceLine(line);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+            return;
+        }
+
+        List<TokenString> tokenized = lexer.start();
+        for (TokenString str: tokenized) {
+            str.removeWhitespace();
+            if (str.match(TokenType.IDENTIFIER, TokenType.ASSIGNMENT)) {
+
+            } else if (str.match(TokenType.IDENTIFIER, TokenType.STRUCTURE_DECLARATION)) {
+
+            } else if (str.match(TokenType.IDENTIFIER, TokenType.FILE_REFERENCE)) {
+
+            } else {
+                Handler.reportError(new Handler.BuildError(6, str.line, 0));
+            }
+        }
+    }
+
+    private boolean isProperty(TokenString string) {
+        if (string.skip(TokenType.TAB).match(TokenType.IDENTIFIER, TokenType.ASSIGNMENT)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    private BMLProperty parseProperty(TokenString string) {
+        TokenString trimmed = string.skip(TokenType.TAB).removeWhitespace();
+        String name = trimmed.consume().contents;
+        trimmed.consume();
+
+        if (trimmed.match(TokenType.STRING_LITERAL)) {
+
+        } else if (trimmed.match(TokenType.INTEGER_LITERAL)) {
+
+        } else if (trimmed.match(TokenType.FLOAT_LITERAL)) {
+
+        } else if (trimmed.match(TokenType.FLOAT_LITERAL, TokenType.VALUE_SEPARATOR, TokenType.FLOAT_LITERAL)) {
+
+        } else if (trimmed.match(TokenType.FLOAT_LITERAL, TokenType.VALUE_SEPARATOR, TokenType.FLOAT_LITERAL, TokenType.VALUE_SEPARATOR, TokenType.FLOAT_LITERAL)) {
+
+        } else {
+
+        }
+    }
+
+    private BMLObject handleObject(String name, int myLayer, List<TokenString> tokenStrings) {
+        BMLObject newObject = new BMLObject(name, myLayer);
+        for (TokenString str: tokenStrings) {
+            int stringLayer = myLayer;
+            while (str.match(TokenType.TAB)) {
+                stringLayer ++;
+            }
+
+            if (stringLayer == myLayer) {
+                // This string is a part of this object
+                if (isProperty(str)) {
+                    newObject.add(parseProperty(str));
+                }
+            }
+        }
+    }
+
+    @Override
+    public String toString() {
+        return "";
     }
 
 }

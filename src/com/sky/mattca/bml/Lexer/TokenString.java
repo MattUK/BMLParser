@@ -175,6 +175,14 @@ public class TokenString {
         return tokenList;
     }
 
+    public TokenString skip(TokenType type) {
+        TokenString copy = this.createCopy();
+        while (copy.match(type)) {
+            copy.consume();
+        }
+        return copy;
+    }
+
     @Override
     public String toString() {
         return "TokenString{" +
